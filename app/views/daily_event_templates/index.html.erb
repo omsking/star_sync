@@ -1,0 +1,51 @@
+<h1>
+  List of all daily events
+</h1>
+
+<hr>
+
+<article>
+  <header>
+    <h2>
+      Add a new daily event
+    </h2>
+  </header>
+
+  <form action="/insert_daily_event" method="post">
+    <div>
+      <label for="color_box">
+        Color
+      </label>
+
+      <input type="text" id="color_box" name="query_color">
+    </div>
+
+    <div>
+      <label for="user_id_box">
+        User
+      </label>
+
+      <input type="text" id="user_id_box" name="query_user_id">
+    </div>
+
+    <button type="submit">
+      Create daily event
+    </button>
+  </form>
+</article>
+
+<hr>
+
+<article>
+  <ul>
+    <% @list_of_daily_events.each do |a_daily_event| %>
+      <li>
+        <a href="/daily_events/<%= a_daily_event.id %>">
+          Daily event #<%= a_daily_event.id %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</article>
+
+<hr>

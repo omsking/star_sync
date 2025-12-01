@@ -1,0 +1,126 @@
+<h1>
+  Daily weather #<%= @the_daily_weather.id %> details
+</h1>
+
+<article>
+  <div>
+    <a href="/daily_weathers">
+      Go back
+    </a>
+  </div>
+
+  <div>
+    <a href="/delete_daily_weather/<%= @the_daily_weather.id %>">
+      Delete daily weather
+    </a>
+  </div>
+  <dl>
+    <dt>
+      Temperature
+    </dt>
+    <dd>
+      <%= @the_daily_weather.temperature %>
+    </dd>
+
+    <dt>
+      Rain percentage
+    </dt>
+    <dd>
+      <%= @the_daily_weather.rain_percentage %>
+    </dd>
+
+    <dt>
+      Snow percentage
+    </dt>
+    <dd>
+      <%= @the_daily_weather.snow_percentage %>
+    </dd>
+
+    <dt>
+      Sun percentage
+    </dt>
+    <dd>
+      <%= @the_daily_weather.sun_percentage %>
+    </dd>
+
+    <dt>
+      User
+    </dt>
+    <dd>
+      <%= @the_daily_weather.user_id %>
+    </dd>
+
+    <dt>
+      Created at
+    </dt>
+    <dd>
+      <%= time_ago_in_words(@the_daily_weather.created_at) %> ago
+    </dd>
+
+    <dt>
+      Updated at
+    </dt>
+    <dd>
+      <%= time_ago_in_words(@the_daily_weather.updated_at) %> ago
+    </dd>
+  </dl>
+</article>
+
+<hr>
+
+
+<article>
+  <header>
+    <h2>
+      Edit daily weather
+    </h2>
+  </header>
+
+  <form action="/modify_daily_weather/<%= @the_daily_weather.id %>"  method="post" >
+    <div>
+      <label for="temperature_box">
+        Temperature
+      </label>
+
+      <input type="text" id="temperature_box" name="query_temperature" value="<%= @the_daily_weather.temperature %>">
+    </div>
+
+    <div>
+      <label for="rain_percentage_box">
+        Rain percentage
+      </label>
+
+      <input type="text" id="rain_percentage_box" name="query_rain_percentage" value="<%= @the_daily_weather.rain_percentage %>">
+    </div>
+
+    <div>
+      <label for="snow_percentage_box">
+        Snow percentage
+      </label>
+
+      <input type="text" id="snow_percentage_box" name="query_snow_percentage" value="<%= @the_daily_weather.snow_percentage %>">
+    </div>
+
+    <div>
+      <label for="sun_percentage_box">
+        Sun percentage
+      </label>
+
+      <input type="text" id="sun_percentage_box" name="query_sun_percentage" value="<%= @the_daily_weather.sun_percentage %>">
+    </div>
+
+    <div>
+      <label for="user_id_box">
+        User
+      </label>
+
+      <input type="text" id="user_id_box" name="query_user_id" value="<%= @the_daily_weather.user_id %>">
+    </div>
+
+    <button type="submit">
+      Update daily weather
+    </button>
+  </form>
+</article>
+
+<hr>

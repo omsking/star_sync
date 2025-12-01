@@ -1,0 +1,51 @@
+<h1>
+  List of all daily horoscopes
+</h1>
+
+<hr>
+
+<article>
+  <header>
+    <h2>
+      Add a new daily horoscope
+    </h2>
+  </header>
+
+  <form action="/insert_daily_horoscope" method="post">
+    <div>
+      <label for="user_id_box">
+        User
+      </label>
+
+      <input type="text" id="user_id_box" name="query_user_id">
+    </div>
+
+    <div>
+      <label for="horoscope_box">
+        Horoscope
+      </label>
+
+      <input type="text" id="horoscope_box" name="query_horoscope">
+    </div>
+
+    <button type="submit">
+      Create daily horoscope
+    </button>
+  </form>
+</article>
+
+<hr>
+
+<article>
+  <ul>
+    <% @list_of_daily_horoscopes.each do |a_daily_horoscope| %>
+      <li>
+        <a href="/daily_horoscopes/<%= a_daily_horoscope.id %>">
+          Daily horoscope #<%= a_daily_horoscope.id %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</article>
+
+<hr>

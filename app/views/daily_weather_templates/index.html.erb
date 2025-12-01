@@ -1,0 +1,75 @@
+<h1>
+  List of all daily weathers
+</h1>
+
+<hr>
+
+<article>
+  <header>
+    <h2>
+      Add a new daily weather
+    </h2>
+  </header>
+
+  <form action="/insert_daily_weather" method="post">
+    <div>
+      <label for="temperature_box">
+        Temperature
+      </label>
+
+      <input type="text" id="temperature_box" name="query_temperature">
+    </div>
+
+    <div>
+      <label for="rain_percentage_box">
+        Rain percentage
+      </label>
+
+      <input type="text" id="rain_percentage_box" name="query_rain_percentage">
+    </div>
+
+    <div>
+      <label for="snow_percentage_box">
+        Snow percentage
+      </label>
+
+      <input type="text" id="snow_percentage_box" name="query_snow_percentage">
+    </div>
+
+    <div>
+      <label for="sun_percentage_box">
+        Sun percentage
+      </label>
+
+      <input type="text" id="sun_percentage_box" name="query_sun_percentage">
+    </div>
+
+    <div>
+      <label for="user_id_box">
+        User
+      </label>
+
+      <input type="text" id="user_id_box" name="query_user_id">
+    </div>
+
+    <button type="submit">
+      Create daily weather
+    </button>
+  </form>
+</article>
+
+<hr>
+
+<article>
+  <ul>
+    <% @list_of_daily_weathers.each do |a_daily_weather| %>
+      <li>
+        <a href="/daily_weathers/<%= a_daily_weather.id %>">
+          Daily weather #<%= a_daily_weather.id %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</article>
+
+<hr>

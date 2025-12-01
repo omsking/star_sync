@@ -1,0 +1,81 @@
+<h1>
+  Daily event #<%= @the_daily_event.id %> details
+</h1>
+
+<article>
+  <div>
+    <a href="/daily_events">
+      Go back
+    </a>
+  </div>
+
+  <div>
+    <a href="/delete_daily_event/<%= @the_daily_event.id %>">
+      Delete daily event
+    </a>
+  </div>
+  <dl>
+    <dt>
+      Color
+    </dt>
+    <dd>
+      <%= @the_daily_event.color %>
+    </dd>
+
+    <dt>
+      User
+    </dt>
+    <dd>
+      <%= @the_daily_event.user_id %>
+    </dd>
+
+    <dt>
+      Created at
+    </dt>
+    <dd>
+      <%= time_ago_in_words(@the_daily_event.created_at) %> ago
+    </dd>
+
+    <dt>
+      Updated at
+    </dt>
+    <dd>
+      <%= time_ago_in_words(@the_daily_event.updated_at) %> ago
+    </dd>
+  </dl>
+</article>
+
+<hr>
+
+
+<article>
+  <header>
+    <h2>
+      Edit daily event
+    </h2>
+  </header>
+
+  <form action="/modify_daily_event/<%= @the_daily_event.id %>"  method="post" >
+    <div>
+      <label for="color_box">
+        Color
+      </label>
+
+      <input type="text" id="color_box" name="query_color" value="<%= @the_daily_event.color %>">
+    </div>
+
+    <div>
+      <label for="user_id_box">
+        User
+      </label>
+
+      <input type="text" id="user_id_box" name="query_user_id" value="<%= @the_daily_event.user_id %>">
+    </div>
+
+    <button type="submit">
+      Update daily event
+    </button>
+  </form>
+</article>
+
+<hr>

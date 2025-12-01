@@ -1,0 +1,81 @@
+<h1>
+  Daily horoscope #<%= @the_daily_horoscope.id %> details
+</h1>
+
+<article>
+  <div>
+    <a href="/daily_horoscopes">
+      Go back
+    </a>
+  </div>
+
+  <div>
+    <a href="/delete_daily_horoscope/<%= @the_daily_horoscope.id %>">
+      Delete daily horoscope
+    </a>
+  </div>
+  <dl>
+    <dt>
+      User
+    </dt>
+    <dd>
+      <%= @the_daily_horoscope.user_id %>
+    </dd>
+
+    <dt>
+      Horoscope
+    </dt>
+    <dd>
+      <%= @the_daily_horoscope.horoscope %>
+    </dd>
+
+    <dt>
+      Created at
+    </dt>
+    <dd>
+      <%= time_ago_in_words(@the_daily_horoscope.created_at) %> ago
+    </dd>
+
+    <dt>
+      Updated at
+    </dt>
+    <dd>
+      <%= time_ago_in_words(@the_daily_horoscope.updated_at) %> ago
+    </dd>
+  </dl>
+</article>
+
+<hr>
+
+
+<article>
+  <header>
+    <h2>
+      Edit daily horoscope
+    </h2>
+  </header>
+
+  <form action="/modify_daily_horoscope/<%= @the_daily_horoscope.id %>"  method="post" >
+    <div>
+      <label for="user_id_box">
+        User
+      </label>
+
+      <input type="text" id="user_id_box" name="query_user_id" value="<%= @the_daily_horoscope.user_id %>">
+    </div>
+
+    <div>
+      <label for="horoscope_box">
+        Horoscope
+      </label>
+
+      <input type="text" id="horoscope_box" name="query_horoscope" value="<%= @the_daily_horoscope.horoscope %>">
+    </div>
+
+    <button type="submit">
+      Update daily horoscope
+    </button>
+  </form>
+</article>
+
+<hr>
