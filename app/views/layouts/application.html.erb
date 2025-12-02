@@ -20,9 +20,60 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <!-- The official Pico CSS stylesheet -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.css">
+
+    <!-- The official Bootstrap utilities stylesheet -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/twbs/bootstrap@main/dist/css/bootstrap-utilities.css">
+
+    <!-- Our modifications to default Pico CSS styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/firstdraft/pico.firstdraft.css@latest/pico.firstdraft.css">
+
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="pico">
+    <header>
+      <div class="container-two-thirds">
+        <nav>
+          <ul>
+            <li>
+              <a href="/">
+                <strong>
+                  StarSync
+                </strong>
+              </a>
+            </li>
+            <li>
+              <% if current_user==nil %>
+                <li>
+                  <a href="/users/sign_in">
+                    Log in </a>
+                </li>
+                <li>
+                  <a href="/users/sign_up">
+                    Sign up </a>
+                </li>
+              <% else %>
+                <li>
+                  <a href="/users/edit">
+                    Edit profile </a>
+                </li>
+                <li>
+                  <a href="/users/sign_out">
+                    Log out </a>
+                </li>
+              <% end %>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container-two-thirds">
+        <%= yield %>
+      </div>
+    </main>
   </body>
 </html>
