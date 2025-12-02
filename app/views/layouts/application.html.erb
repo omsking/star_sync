@@ -35,36 +35,29 @@
   <body class="pico">
     <header>
       <div class="container-two-thirds">
-        <nav>
-          <ul>
-            <li>
-              <a href="/">
-                <strong>
-                  StarSync
-                </strong>
-              </a>
-            </li>
-            <li>
-              <% if current_user==nil %>
-                <li>
-                  <a href="/users/sign_in">
-                    Log in </a>
-                </li>
-                <li>
-                  <a href="/users/sign_up">
-                    Sign up </a>
-                </li>
-              <% else %>
-                <li>
-                  <a href="/users/edit">
-                    Edit profile </a>
-                </li>
-                <li>
-                  <a href="/users/sign_out">
-                    Log out </a>
-                </li>
-              <% end %>
-            </li>
+        <nav style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="flex: 1;"></div>
+          <div style="flex: 1; text-align: center;">
+            <h2 style="margin: 0;">
+              <strong>StarSync</strong>
+            </h2>
+          </div>
+          <ul style="flex: 1; justify-content: flex-end; margin: 0;">
+            <% if current_user==nil %>
+              <li>
+                <a href="/users/sign_in">Log in</a>
+              </li>
+              <li>
+                <a href="/users/sign_up">Sign up</a>
+              </li>
+            <% else %>
+              <li>
+                <a href="/users/edit">Edit profile</a>
+              </li>
+              <li>
+                <a href="/users/sign_out">Log out</a>
+              </li>
+            <% end %>
           </ul>
         </nav>
       </div>
