@@ -1,4 +1,5 @@
-class DailyWeathersController < ApplicationController
+class HomeController < ApplicationController
   def index
-    render({ :template => "homepage/index" })
+    render({ :template => "home_templates/index" })
+  end
 end
