@@ -102,4 +102,7 @@ group :test do
   gem "webmock"
   gem "capybara"
   gem "selenium-webdriver", "~> 4.11.0"
+
+# OpenAI gem
+  gem "ruby-openai"
 end
