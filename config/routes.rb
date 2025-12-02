@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get("/", { :controller => "home", :action => "index" })
+
   # Routes for the Daily horoscope resource:
 
   # CREATE
