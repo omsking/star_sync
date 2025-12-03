@@ -2,6 +2,7 @@ class HomeController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    # Daily Horoscope
     # Check if user has a horoscope for today
     @dailyhoroscope = current_user.daily_horoscopes.find_by(
       "DATE(created_at) = ?", Date.today
@@ -27,6 +28,42 @@ class HomeController < ApplicationController
 
       # Update the horoscope record with AI response
       @dailyhoroscope.update(horoscope: ai_response)
+    end
+
+    # Daily Weather (update even if it's already been populated today)
+    # Set user location and find coordinates
+    @user_location = current_user.location
+    @maps_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + user_location + "&key=" + ENV.fetch("GMAPS_KEY")
+
+    raw_resp = HTTP.get(maps_url)
+    parsed_resp = JSON.parse(raw_resp)
+    results = parsed_resp.fetch("results")
+    results_array = results.at(0)
+    geometry = results_array.fetch("geometry")
+
+    location = geometry.fetch("location")
+    lat = location.fetch("lat")
+    lng = location.fetch(("lng"))
+
+    # Get weather data
+    weather_url = "https://api.pirateweather.net/forecast/" + ENV.fetch("PIRATE_WEATHER_KEY") + "/" + lat.to_s + "," + lng.to_s
+    raw_weather = HTTP.get(weather_url)
+    parsed_weather = JSON.parse(raw_weather)
+
+    hourly_hash = parsed_weather.fetch("hourly")
+    @hourly_array = hourly_hash.fetch("data")
+
+    # Look at precipitation data
+    count = 0
+    hourly_array[0..11].each_with_index do |precip, index|
+      if precip.fetch("precipProbability") >= 0.10
+        count += 1
+      end
+    end
+
+    if count >= 1
+      pp "You might want to carry an umbrella!"
+    else pp "You probably won't need an umbrella today."    
     end
 
     render({ :template => "home_templates/index" })
