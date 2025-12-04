@@ -10,32 +10,41 @@ class HomeController < ApplicationController
 
     # If no horoscope exists for today, create one
     if @dailyhoroscope.nil?
-      # Create a new horoscope record
-      @dailyhoroscope = current_user.daily_horoscopes.create
+      
+      # Build a new record for this user
+      @dailyhoroscope = current_user.daily_horoscopes.new
 
       # Initialize AI Chat
       c = AI::Chat.new
 
-      # Set system context for horoscope generation
+      # System context
       c.system("You are an expert astrologer who creates personalized daily horoscopes based on birth information. Provide a funny, light-hearted daily horoscope reading based on birth date, and on birth location/time if provided. This horoscope should only be one sentence, and your response shouldn't include anything other than the one-sentence horoscope. The horoscope can be kind or saracastic, but it shouldn't be mean or too dark. Good themes include friendships, relationships, or career. The horoscope doesn't need to be directive or logical.")
 
-      # Prepare user birth information
+      # User birth information
       birth_info = "Birth Date: #{current_user.birth_date}, Birth Location: #{current_user.birth_location}, Birth Time: #{current_user.birth_time}. Please provide a personalized daily horoscope for #{Date.today}."
 
-      # Generate horoscope with AI
       c.user(birth_info)
-      ai_response = c.generate!
 
-      # Update the horoscope record with AI response
-      @dailyhoroscope.update(horoscope: ai_response)
+      # Ask AI to respond (this appends to c.messages)
+      c.generate!
+
+      # Get the assistant's reply text (per ai-chat docs)
+      ai_text = c.last
+
+      # Debug in logs to confirm it's not blank
+      pp ai_text
+
+      # Save on the record
+      @dailyhoroscope.horoscope = ai_text
+      @dailyhoroscope.save
     end
 
     # Daily Weather (update even if it's already been populated today)
     # Set user location and find coordinates
     @user_location = current_user.location
-    @maps_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + user_location + "&key=" + ENV.fetch("GMAPS_KEY")
+    @maps_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + @user_location + "&key=" + ENV.fetch("GMAPS_KEY")
 
-    raw_resp = HTTP.get(maps_url)
+    raw_resp = HTTP.get(@maps_url)
     parsed_resp = JSON.parse(raw_resp)
     results = parsed_resp.fetch("results")
     results_array = results.at(0)
@@ -51,7 +60,7 @@ class HomeController < ApplicationController
     parsed_weather = JSON.parse(raw_weather)
 
     hourly_hash = parsed_weather.fetch("hourly")
-    @hourly_array = hourly_hash.fetch("data")
+    hourly_array = hourly_hash.fetch("data")
 
     # Look at precipitation data
     count = 0
@@ -63,8 +72,7 @@ class HomeController < ApplicationController
 
     if count >= 1
       pp "You might want to carry an umbrella!"
-    else pp "You probably won't need an umbrella today."    
-    end
+    else pp "You probably won't need an umbrella today."     end
 
     render({ :template => "home_templates/index" })
   end
