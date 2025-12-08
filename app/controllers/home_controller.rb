@@ -39,7 +39,7 @@ class HomeController < ApplicationController
       #@dailyhoroscope.save
     end
 
-    # Daily Weather (update even if it's already been populated today)
+    # Daily Weather (update every login)
     # Set user location and find coordinates
     @user_location = current_user.current_location
     @maps_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + @user_location + "&key=" + ENV.fetch("GMAPS_KEY")
@@ -59,6 +59,12 @@ class HomeController < ApplicationController
     raw_weather = HTTP.get(weather_url)
     parsed_weather = JSON.parse(raw_weather)
 
+    # Current weather data
+    currently_hash = parsed_weather.fetch("currently")
+    @current_temp = currently_hash.fetch("temperature")
+    @current_summary = currently_hash.fetch("summary")
+
+    # Weather forecast
     hourly_hash = parsed_weather.fetch("hourly")
     hourly_array = hourly_hash.fetch("data")
 
@@ -70,22 +76,12 @@ class HomeController < ApplicationController
       end
     end
 
-    if @precipcount >= 1
-      pp "You might want to carry an umbrella!"
-    else pp "You probably won't need an umbrella today."     
-    end
-
     # Look at cloud cover data
     @cloudycount = 0
     hourly_array[0..11].each_with_index do |cloudy, index|
       if cloudy.fetch("cloudCover") >= 0.875
         @cloudycount += 1
       end
-    end
-
-    if @cloudycount <= 4
-      pp "You might want to bring sunglasses!"
-    else pp "You probably won't need sunglasses today."     
     end
 
     # Look at temperature data
@@ -96,11 +92,7 @@ class HomeController < ApplicationController
       end
     end
 
-    if @coldcount >= 4
-      pp "You might want to bring an extra layer!"
-    else pp "You probably won't need an extra layer today."     
-    end
-
+    # Render view template
     render({ :template => "home_templates/index" })
   end
 end
