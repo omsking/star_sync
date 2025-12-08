@@ -11,13 +11,13 @@ class HomeController < ApplicationController
     # If no horoscope exists for today, create one
     if @dailyhoroscope.nil?
       
-      # Build a new record for this user
+      # Build a new daily record for this user
       @dailyhoroscope = current_user.daily_horoscopes.new
 
-      # Initialize AI Chat
+      # Initialize Chat
       c = AI::Chat.new
 
-      # System context
+      # System prompt
       c.system("You are an expert astrologer who creates personalized daily horoscopes based on birth information. Provide a funny, light-hearted daily horoscope reading based on birth date, and on birth location/time if provided. This horoscope should only be one sentence, and your response shouldn't include anything other than the one-sentence horoscope. The horoscope can be kind or saracastic, but it shouldn't be mean or too dark. Good themes include friendships, relationships, or career. The horoscope doesn't need to be directive or logical.")
 
       # User birth information
@@ -25,18 +25,18 @@ class HomeController < ApplicationController
 
       c.user(birth_info)
 
-      # Ask AI to respond (this appends to c.messages)
-      c.generate!
+      # Generate response
+      #c.generate!
 
-      # Get the assistant's reply text (per ai-chat docs)
-      ai_text = c.last
+      # Get the reply text
+      #ai_text = c.last
 
       # Debug in logs to confirm it's not blank
-      pp ai_text
+      #pp ai_text
 
       # Save on the record
-      @dailyhoroscope.horoscope = ai_text
-      @dailyhoroscope.save
+      #@dailyhoroscope.horoscope = ai_text
+      #@dailyhoroscope.save
     end
 
     # Daily Weather (update even if it's already been populated today)
@@ -63,16 +63,43 @@ class HomeController < ApplicationController
     hourly_array = hourly_hash.fetch("data")
 
     # Look at precipitation data
-    count = 0
+    @precipcount = 0
     hourly_array[0..11].each_with_index do |precip, index|
       if precip.fetch("precipProbability") >= 0.10
-        count += 1
+        @precipcount += 1
       end
     end
 
-    if count >= 1
+    if @precipcount >= 1
       pp "You might want to carry an umbrella!"
-    else pp "You probably won't need an umbrella today."     end
+    else pp "You probably won't need an umbrella today."     
+    end
+
+    # Look at cloud cover data
+    @cloudycount = 0
+    hourly_array[0..11].each_with_index do |cloudy, index|
+      if cloudy.fetch("cloudCover") >= 0.875
+        @cloudycount += 1
+      end
+    end
+
+    if @cloudycount <= 4
+      pp "You might want to bring sunglasses!"
+    else pp "You probably won't need sunglasses today."     
+    end
+
+    # Look at temperature data
+   @coldcount = 0
+    hourly_array[0..11].each_with_index do |cold, index|
+      if cold.fetch("temperature") <= 32
+        @coldcount += 1
+      end
+    end
+
+    if @coldcount >= 4
+      pp "You might want to bring an extra layer!"
+    else pp "You probably won't need an extra layer today."     
+    end
 
     render({ :template => "home_templates/index" })
   end

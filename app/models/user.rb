@@ -6,6 +6,7 @@
 #  birth_date             :date
 #  birth_location         :string
 #  birth_time             :time
+#  current_location       :string
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  location               :string
@@ -35,6 +36,6 @@ class User < ApplicationRecord
  # validates :text_time, presence: true
   validates :phone_number, format: { with: /\A[0-9]{10}\z/ }
   validates :phone_number, uniqueness: { case_sensitive: false, message: "This phone number has already been registered. Please sign in." }
- # validates :location, presence: true
+  validates :current_location, presence: true
   validates :birth_date, presence: true
 end

@@ -6,4 +6,15 @@
 
 <p>Here's your packing list for today!</p>
 
-<p> @hourly_array </p>
+<ul>
+  <% if @precipcount >= 1 %>
+    <li>Umbrella (it may rain today)</li>
+  <% end %>
+  <% if @cloudycount <= 4 %>
+    <li>Sunglasses (it's pretty sunny today!)</li>
+  <% end %>
+  <% if @coldcount >= 4 %>
+    <li>Extra layer (today has temps below freezing!)</li>
+  <% end %>
+</ul>
+rails generate migration RenameLocationToBirthLocationInUsers
