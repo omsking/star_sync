@@ -6,10 +6,10 @@
 #  birth_date             :date
 #  birth_location         :string
 #  birth_time             :time
+#  calendar_prompt        :string
 #  current_location       :string
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
-#  location               :string
 #  phone_number           :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime

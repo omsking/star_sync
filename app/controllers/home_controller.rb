@@ -41,7 +41,7 @@ class HomeController < ApplicationController
 
     # Daily Weather (update even if it's already been populated today)
     # Set user location and find coordinates
-    @user_location = current_user.location
+    @user_location = current_user.current_location
     @maps_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + @user_location + "&key=" + ENV.fetch("GMAPS_KEY")
 
     raw_resp = HTTP.get(@maps_url)
