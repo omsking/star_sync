@@ -104,6 +104,7 @@ group :test do
   gem "selenium-webdriver", "~> 4.11.0"
 
 #Google Oath Gems
+  gem "omniauth"
   gem "omniauth-google-oauth2"
   gem "omniauth-rails_csrf_protection"
 

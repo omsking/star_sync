@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "omniauth-google-oauth2"
 
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
@@ -272,12 +273,14 @@ Devise.setup do |config|
 
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting up on your models and hooks.
-  config.omniauth :GoogleOauth2,
-    ENV.fetch("GOOGLE_CLIENT_ID"),
-    ENV.fetch("GOOGLE_CLIENT_SECRET"),
-    scope: "email,profile,https://www.googleapis.com/auth/calendar.readonly",
-    prompt: "consent",
-    access_type: "offline"
+  config.omniauth :google_oauth2,
+     ENV.fetch("GOOGLE_CLIENT_ID"),
+     ENV.fetch("GOOGLE_CLIENT_SECRET"),
+     {
+       :scope       => "email,profile,https://www.googleapis.com/auth/calendar.readonly",
+       :prompt      => "consent",
+       :access_type => "offline"
+     }
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
