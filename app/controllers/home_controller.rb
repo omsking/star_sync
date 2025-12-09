@@ -30,12 +30,10 @@ class HomeController < ApplicationController
 
       # Get the reply text
       ai_text = c.last
-
-      # Debug in logs to confirm it's not blank
-      pp ai_text
+      clean_resp = ai_text.fetch(:content)
 
       # Save on the record
-      @dailyhoroscope.horoscope = ai_text
+      @dailyhoroscope.horoscope = clean_resp
       @dailyhoroscope.save
     end
 
