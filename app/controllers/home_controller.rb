@@ -26,17 +26,17 @@ class HomeController < ApplicationController
       c.user(birth_info)
 
       # Generate response
-      #c.generate!
+      c.generate!
 
       # Get the reply text
-      #ai_text = c.last
+      ai_text = c.last
 
       # Debug in logs to confirm it's not blank
-      #pp ai_text
+      pp ai_text
 
       # Save on the record
-      #@dailyhoroscope.horoscope = ai_text
-      #@dailyhoroscope.save
+      @dailyhoroscope.horoscope = ai_text
+      @dailyhoroscope.save
     end
 
     # Daily Weather (update every login)

@@ -103,7 +103,4 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver", "~> 4.11.0"
 
-# OpenAI regular gem
-  gem "ruby-openai"
-
 end
