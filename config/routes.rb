@@ -68,5 +68,5 @@ Rails.application.routes.draw do
     omniauth_callbacks: "omniauth_callbacks"
   }
 
-  root "pages#home"
+  root "boards#index"
 end
