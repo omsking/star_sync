@@ -25,7 +25,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  config.mailer_sender = "please-change-me-at-config-initializers-devise@example.com"
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
@@ -37,7 +37,7 @@ Devise.setup do |config|
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
   # available as additional gems.
-  require 'devise/orm/active_record'
+  require "devise/orm/active_record"
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
@@ -269,19 +269,21 @@ Devise.setup do |config|
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :get
 
-# config/initializers/devise.rb
+  # config/initializers/devise.rb
 
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting up on your models and hooks.
-  config.omniauth :google_oauth2,
-     ENV.fetch("GOOGLE_CLIENT_ID"),
-     ENV.fetch("GOOGLE_CLIENT_SECRET"),
-     {
-       :scope       => "email,profile,https://www.googleapis.com/auth/calendar.readonly",
-       :prompt      => "consent",
-       :access_type => "offline"
-     }
+  # Make OmniAuth listen on /users/auth (matches Devise routes)
+  config.omniauth_path_prefix = "/users/auth"
 
+  config.omniauth :google_oauth2,
+    ENV.fetch("GOOGLE_CLIENT_ID"),
+    ENV.fetch("GOOGLE_CLIENT_SECRET"),
+    {
+      :scope => "email,profile,https://www.googleapis.com/auth/calendar.readonly",
+      :prompt => "consent",
+      :access_type => "offline",
+    }
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

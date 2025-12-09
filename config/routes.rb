@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  devise_for :users, {
+    :controllers => {
+      :omniauth_callbacks => "users/omniauth_callbacks"
+    }
+  }
+
+  root to: "boards#index"
+
+
   get("/", { :controller => "home", :action => "index" })
   
   # Routes for the Daily horoscope resource:
@@ -64,9 +73,6 @@ Rails.application.routes.draw do
 
   #------------------------------
   # Route for Google Calendar Configuration
-  devise_for :users, controllers: {
-    omniauth_callbacks: "omniauth_callbacks"
-  }
-
-  root "boards#index"
+  #devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  #root to: "boards#index"
 end

@@ -23,8 +23,14 @@
   </div>
 <% end %>
 
+<%= render "devise/shared/links" %>
+
 <p>To link Google Calendar, please sign in with Google:</p>
 
-<%= button_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path, data: { turbo: false } %>
+<p><a href="/users/auth/google_oauth2" data-turbo="false">
+  Sign in with Google
+</a></p>
 
-<%= render "devise/shared/links" %>
+<p>
+<%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path, "data-turbo" => "false" %>
+</p>>
