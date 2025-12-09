@@ -103,4 +103,8 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver", "~> 4.11.0"
 
+#Google Oath Gems
+  gem "omniauth-google-oauth2"
+  gem "omniauth-rails_csrf_protection"
+
 end
