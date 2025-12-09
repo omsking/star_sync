@@ -31,6 +31,8 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  encrypts :google_access_token, :google_refresh_token
+  
   devise :database_authenticatable,
           :registerable,
           :recoverable,
@@ -48,4 +50,21 @@ class User < ApplicationRecord
   validates :phone_number, uniqueness: { case_sensitive: false, message: "This phone number has already been registered. Please sign in." }
   validates :current_location, presence: true
   validates :birth_date, presence: true
+
+  # Google Calendar Oauth Setup  
+  def self.from_omniauth(auth)
+    user = find_by(provider: auth.provider, uid: auth.uid)
+    user ||= find_by(email: auth.info.email)
+    user ||= new(
+      email: auth.info.email,
+      password: Devise.friendly_token[0, 20]
+    )
+
+    user.provider = auth.provider
+    user.uid = auth.uid
+    user.google_access_token = auth.credentials.token
+    user.google_refresh_token = auth.credentials.refresh_token if auth.credentials.refresh_token.present?
+    user.save
+    user
+  end
 end

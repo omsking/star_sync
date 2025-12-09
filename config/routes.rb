@@ -58,7 +58,15 @@ Rails.application.routes.draw do
 
   #------------------------------
 
-  devise_for :users
+  #devise_for :users
   # This is a blank app! Pick your first screen, build out the RCAV, and go from there. E.g.:
   # get("/your_first_screen", { :controller => "pages", :action => "first" })
+
+  #------------------------------
+  # Route for Google Calendar Configuration
+  devise_for :users, controllers: {
+    omniauth_callbacks: "omniauth_callbacks"
+  }
+
+  root "pages#home"
 end

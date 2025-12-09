@@ -108,4 +108,7 @@ group :test do
   gem "omniauth-google-oauth2"
   gem "omniauth-rails_csrf_protection"
 
+# Gemfile
+  gem "google-apis-calendar_v3"
+
 end

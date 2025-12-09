@@ -23,4 +23,8 @@
   </div>
 <% end %>
 
+<p>To link Google Calendar, please sign in with Google:</p>
+
+<%= button_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path, data: { turbo: false } %>
+
 <%= render "devise/shared/links" %>
