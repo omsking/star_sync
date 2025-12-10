@@ -31,7 +31,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  encrypts :google_access_token, :google_refresh_token
+  # encrypts :google_access_token, :google_refresh_token # TODO: configure Active Record Encryption keys
   
   devise :database_authenticatable,
           :registerable,
@@ -46,10 +46,10 @@ class User < ApplicationRecord
   has_many  :daily_horoscopes, class_name: "DailyHoroscope", foreign_key: "user_id", dependent: :destroy
 
  # validates :text_time, presence: true
-  validates :phone_number, format: { with: /\A[0-9]{10}\z/ }
-  validates :phone_number, uniqueness: { case_sensitive: false, message: "This phone number has already been registered. Please sign in." }
-  validates :current_location, presence: true
-  validates :birth_date, presence: true
+ # validates :phone_number, format: { with: /\A[0-9]{10}\z/ }
+ # validates :phone_number, uniqueness: { case_sensitive: false, message: "This phone number has already been registered. Please sign in." }
+ # validates :current_location, presence: true
+ # validates :birth_date, presence: true
 
   # Google Calendar Oauth Setup  
   def self.from_omniauth(auth)
