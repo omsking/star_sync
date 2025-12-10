@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     }
   }
 
-  root to: "boards#index"
+  root to: "home#index"
 
 
   get("/", { :controller => "home", :action => "index" })
