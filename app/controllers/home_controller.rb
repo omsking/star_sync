@@ -40,61 +40,88 @@ class HomeController < ApplicationController
         @dailyhoroscope.save
       end
 
-      # Daily Weather (update every login)
-      # Set user location and find coordinates
-      @user_location = current_user.current_location
-      @maps_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + @user_location + "&key=" + ENV.fetch("GMAPS_KEY")
+    # Daily Weather (update every login)
+    # Set user location and find coordinates
+    @user_location = current_user.current_location
+    @maps_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + @user_location + "&key=" + ENV.fetch("GMAPS_KEY")
 
-      raw_resp = HTTP.get(@maps_url)
-      parsed_resp = JSON.parse(raw_resp)
-      results = parsed_resp.fetch("results")
-      results_array = results.at(0)
-      geometry = results_array.fetch("geometry")
+    raw_resp = HTTP.get(@maps_url)
+    parsed_resp = JSON.parse(raw_resp)
+    results = parsed_resp.fetch("results")
+    results_array = results.at(0)
+    geometry = results_array.fetch("geometry")
 
-      location = geometry.fetch("location")
-      lat = location.fetch("lat")
-      lng = location.fetch(("lng"))
+    location = geometry.fetch("location")
+    lat = location.fetch("lat")
+    lng = location.fetch(("lng"))
 
-      # Get weather data
-      weather_url = "https://api.pirateweather.net/forecast/" + ENV.fetch("PIRATE_WEATHER_KEY") + "/" + lat.to_s + "," + lng.to_s
-      raw_weather = HTTP.get(weather_url)
-      parsed_weather = JSON.parse(raw_weather)
+    # Get weather data
+    weather_url = "https://api.pirateweather.net/forecast/" + ENV.fetch("PIRATE_WEATHER_KEY") + "/" + lat.to_s + "," + lng.to_s
+    raw_weather = HTTP.get(weather_url)
+    parsed_weather = JSON.parse(raw_weather)
 
-      # Current weather data
-      currently_hash = parsed_weather.fetch("currently")
-      @current_temp = currently_hash.fetch("temperature")
-      @current_summary = currently_hash.fetch("summary")
+    # Current weather data
+    currently_hash = parsed_weather.fetch("currently")
+    @current_temp = currently_hash.fetch("temperature")
+    @current_summary = currently_hash.fetch("summary")
 
-      # Weather forecast
-      hourly_hash = parsed_weather.fetch("hourly")
-      hourly_array = hourly_hash.fetch("data")
+    # Weather forecast
+    hourly_hash = parsed_weather.fetch("hourly")
+    hourly_array = hourly_hash.fetch("data")
 
-      # Look at precipitation data
-      @precipcount = 0
-      hourly_array[0..11].each_with_index do |precip, index|
-        if precip.fetch("precipProbability") >= 0.10
-          @precipcount += 1
-        end
+    # Look at precipitation data
+    @precipcount = 0
+    hourly_array[0..11].each_with_index do |precip, index|
+      if precip.fetch("precipProbability") >= 0.10
+        @precipcount += 1
       end
+    end
 
-      # Look at cloud cover data
-      @cloudycount = 0
-      hourly_array[0..11].each_with_index do |cloudy, index|
-        if cloudy.fetch("cloudCover") >= 0.875
-          @cloudycount += 1
-        end
+    # Look at cloud cover data
+    @cloudycount = 0
+    hourly_array[0..11].each_with_index do |cloudy, index|
+      if cloudy.fetch("cloudCover") >= 0.875
+        @cloudycount += 1
       end
+    end
 
-      # Look at temperature data
+    # Look at temperature data
     @coldcount = 0
-      hourly_array[0..11].each_with_index do |cold, index|
-        if cold.fetch("temperature") <= 32
-          @coldcount += 1
-        end
+    hourly_array[0..11].each_with_index do |cold, index|
+      if cold.fetch("temperature") <= 32
+        @coldcount += 1
       end
+    end
+    
+    # Get Google Calendar Info
+    if current_user.google_access_token.present?
+      service = Google::Apis::CalendarV3::CalendarService.new
 
-      # Render view template
-      render({ :template => "home_templates/index" })
+      auth_client = Signet::OAuth2::Client.new(
+        :access_token => current_user.google_access_token
+      )
+      service.authorization = auth_client
+
+      begin
+        response = service.list_events(
+          "primary",
+          max_results: 10,
+          single_events: true,
+          order_by: "startTime",
+          time_min: Time.current.iso8601
+        )
+
+        @events = response.items || []
+      rescue Google::Apis::AuthorizationError
+        # token is invalid/expired
+        @events = []
+      end
+    else
+      @events = []
+    end
+
+    # Render view template
+    render({ :template => "home_templates/index" })
     end
   end
 end
