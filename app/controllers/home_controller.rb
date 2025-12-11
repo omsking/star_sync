@@ -21,7 +21,7 @@ class HomeController < ApplicationController
         c = AI::Chat.new
 
         # System prompt
-        c.system("You are an expert astrologer who creates personalized daily horoscopes based on birth information. Provide a funny, light-hearted daily horoscope reading based on birth date, and on birth location/time if provided. This horoscope should only be one sentence, and your response shouldn't include anything other than the one-sentence horoscope. The horoscope can be kind or saracastic, but it shouldn't be mean or too dark. Good themes include friendships, relationships, or career. The horoscope doesn't need to be directive or logical.")
+        c.system("You are an expert astrologer who creates personalized daily horoscopes based on birth information. Provide a funny, light-hearted daily horoscope reading based on birth date, and on birth location/time if provided. This horoscope should only be one sentence, and your response shouldn't include anything other than the one-sentence horoscope. The horoscope can be kind or saracastic, but it shouldn't be mean or too dark. Good themes include friendships, relationships, or career. The horoscope doesn't need to be directive or logical. You can occassionally reference the star sign and/or birth location, but you shouldn't do so every day.")
 
         # User birth information
         birth_info = "Birth Date: #{current_user.birth_date}, Birth Location: #{current_user.birth_location}, Birth Time: #{current_user.birth_time}. Please provide a personalized daily horoscope for #{Date.today}."
@@ -94,31 +94,31 @@ class HomeController < ApplicationController
     end
     
     # Get Google Calendar Info
-    if current_user.google_access_token.present?
-      service = Google::Apis::CalendarV3::CalendarService.new
+    #if current_user.google_access_token.present?
+    #  service = Google::Apis::CalendarV3::CalendarService.new
 
-      auth_client = Signet::OAuth2::Client.new(
-        :access_token => current_user.google_access_token
-      )
-      service.authorization = auth_client
+    #  auth_client = Signet::OAuth2::Client.new(
+    #    :access_token => current_user.google_access_token
+    #  )
+    #  service.authorization = auth_client
 
-      begin
-        response = service.list_events(
-          "primary",
-          max_results: 10,
-          single_events: true,
-          order_by: "startTime",
-          time_min: Time.current.iso8601
-        )
+    #  begin
+    #    response = service.list_events(
+    #      "primary",
+    #      max_results: 10,
+    #      single_events: true,
+    #      order_by: "startTime",
+    #      time_min: Time.current.iso8601
+    #    )
 
-        @events = response.items || []
-      rescue Google::Apis::AuthorizationError
+    # @events = response.items || []
+    #  rescue Google::Apis::AuthorizationError
         # token is invalid/expired
-        @events = []
-      end
-    else
-      @events = []
-    end
+    #    @events = []
+    #  end
+    #else
+    #  @events = []
+    #end
 
     # Render view template
     render({ :template => "home_templates/index" })
