@@ -15,5 +15,7 @@
   <% if @coldcount >= 4 %>
     <li>Extra layer (ouch, today has temps below freezing)</li>
   <% end %>
-  <li><%= @packing_list %></li>
+  <% @packing_list_items.each do |item| %>
+    <li><%= item %></li>
+  <% end %>
 </ul>

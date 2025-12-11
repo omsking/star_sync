@@ -129,7 +129,7 @@ class HomeController < ApplicationController
         a = AI::Chat.new
 
         # System prompt
-        a.system("The user has provided a rundown of what they need to pack based on the events in their Google Calendar. You need to read the Google Calendar, find the closest matches to the user's description, and then write the packing list. The packing list should exactly match what the user has said. For the list, return a bulleted list with the first letter of each bullet capitalized.")
+        a.system("The user has provided a rundown of what they need to pack based on the events in their Google Calendar. You need to read the Google Calendar, find the closest matches to the user's description, and then write the packing list. The packing list should exactly match what the user has said. Return the packing items as bullets with one item per line and the first letter of each bullet capitalized.")
 
         # Turn calendar events into a text summary
         event_lines = @events.map do |event|
@@ -148,11 +148,28 @@ class HomeController < ApplicationController
           )
 
         # Generate response
-        a.generate!
+        ai_reply = a.generate!
 
-        # Get the reply text
-        ai_list = a.last
-        @packing_list = ai_list.fetch(:content)
+        # Get just the assistant text
+        packing_text = ai_reply.fetch(:content).to_s
+
+        lines = packing_text.to_s.split(/\r?\n/)
+
+        @packing_list_items = []
+
+        lines.each do |raw_line|
+          # Keep only lines that look like bullets, e.g. "- Chargers"
+          stripped = raw_line.lstrip
+
+          next unless stripped.start_with?("-", "*")
+
+          # Remove the bullet and any leading spaces
+          item = stripped.gsub(/^[\-\*]\s*/, "").strip
+
+          next if item == ""
+
+          @packing_list_items.push(item)
+        end
 
     # Render view template
     render({ :template => "home_templates/index" })
