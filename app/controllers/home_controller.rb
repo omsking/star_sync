@@ -123,6 +123,37 @@ class HomeController < ApplicationController
     else
       @events = []
     end
+
+    # Have AI write the packing list based on Calendar + user's calendar_prompt
+    # Initialize Chat
+        a = AI::Chat.new
+
+        # System prompt
+        a.system("The user has provided a rundown of what they need to pack based on the events in their Google Calendar. You need to read the Google Calendar, find the closest matches to the user's description, and then write the packing list. The packing list should exactly match what the user has said. For the list, return a bulleted list with the first letter of each bullet capitalized.")
+
+        # Turn calendar events into a text summary
+        event_lines = @events.map do |event|
+          start_time = event.start.date_time || event.start.date
+          "#{start_time} - #{event.summary}"
+        end
+
+        events_text = event_lines.join("\n")
+
+        # Write the user message
+        a.user(
+          "User's packing description:\n" \
+          "#{current_user.calendar_prompt}\n\n" \
+          "Upcoming calendar events:\n" \
+          "#{events_text}"
+          )
+
+        # Generate response
+        a.generate!
+
+        # Get the reply text
+        ai_list = a.last
+        @packing_list = ai_list.fetch(:content)
+
     # Render view template
     render({ :template => "home_templates/index" })
     end
