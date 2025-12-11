@@ -94,32 +94,35 @@ class HomeController < ApplicationController
     end
     
     # Get Google Calendar Info
-    #if current_user.google_access_token.present?
-    #  service = Google::Apis::CalendarV3::CalendarService.new
+    if current_user.google_access_token.present?
+      service = Google::Apis::CalendarV3::CalendarService.new
 
-    #  auth_client = Signet::OAuth2::Client.new(
-    #    :access_token => current_user.google_access_token
-    #  )
-    #  service.authorization = auth_client
+      auth_client = Signet::OAuth2::Client.new(
+        :client_id => ENV["GOOGLE_CLIENT_ID"],
+        :client_secret => ENV["GOOGLE_CLIENT_SECRET"],
+        :access_token => current_user.google_access_token,
+        :refresh_token => current_user.google_refresh_token,
+        :token_credential_uri => "https://oauth2.googleapis.com/token"
+      )
 
-    #  begin
-    #    response = service.list_events(
-    #      "primary",
-    #      max_results: 10,
-    #      single_events: true,
-    #      order_by: "startTime",
-    #      time_min: Time.current.iso8601
-    #    )
+      service.authorization = auth_client
 
-    # @events = response.items || []
-    #  rescue Google::Apis::AuthorizationError
-        # token is invalid/expired
-    #    @events = []
-    #  end
-    #else
-    #  @events = []
-    #end
+      begin
+        response = service.list_events(
+          "primary",
+          :max_results => 10,
+          :single_events => true,
+          :order_by => "startTime",
+          :time_min => Time.current.iso8601
+        )
 
+        @events = response.items || []
+      rescue Google::Apis::AuthorizationError
+        @events = []
+      end
+    else
+      @events = []
+    end
     # Render view template
     render({ :template => "home_templates/index" })
     end
