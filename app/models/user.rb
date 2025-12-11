@@ -6,7 +6,7 @@
 #  birth_date             :date
 #  birth_location         :string
 #  birth_time             :time
-#  calendar_prompt        :string
+#  calendar_prompt        :text
 #  current_location       :string
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null

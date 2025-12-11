@@ -38,6 +38,11 @@
   </div>
 
   <div class="field">
+    <%= f.label :calendar_prompt, "Describe how you'd like your packing list created based on your Calendar events" %><br />
+    <%= f.text_field :calendar_prompt %>
+  </div>
+
+  <div class="field">
     <%= f.label :password %>
     <% if @minimum_password_length %>
       <em>(<%= @minimum_password_length %> characters minimum)</em>

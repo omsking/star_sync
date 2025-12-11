@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_09_194401) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_11_185958) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -189,7 +189,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_09_194401) do
     t.string "phone_number"
     t.string "birth_location"
     t.date "birth_date"
-    t.string "calendar_prompt"
+    t.text "calendar_prompt"
     t.time "birth_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
